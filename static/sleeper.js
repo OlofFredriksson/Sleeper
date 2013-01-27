@@ -10,7 +10,7 @@ $(document).ready(function () {
 				$('#secondsFromFile').html(data);
 			},
 			complete: function() {
-				window.setTimeout(refreshPage, 2000);
+				window.setTimeout(refreshPage, 1000);
 			}
 		});
 	}
