@@ -4,7 +4,7 @@ $(document).ready(function () {
 			url: "/getSleepValue",
 			cache: false,
 			beforeSend: function() {
-				$('#secondsFromFile').append("<img src='static/loading.gif' />");
+				$('#secondsFromFile').html("<img src='static/loading.gif' />");
 			},
 			success: function(data) {
 				$('#secondsFromFile').html(data);
