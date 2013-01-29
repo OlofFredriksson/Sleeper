@@ -11,7 +11,7 @@ from subprocess import call
 ## Config TODO, should be in a separate file
 define("port", default=8888, help="run on the given port", type=int)
 define("secondsLeft",default=2700) # 45 minutes
-define("startUpAudioVolume",default=100) # 45 minutes
+define("startUpAudioVolume",default=100)
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
