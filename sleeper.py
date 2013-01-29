@@ -8,7 +8,10 @@ from datetime import datetime
 from tornado.options import define, options
 from subprocess import call
 
+## Config TODO, should be in a separate file
 define("port", default=8888, help="run on the given port", type=int)
+define("secondsLeft",default=2700) # 45 minutes
+define("startUpAudioVolume",default=100) # 45 minutes
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -18,31 +21,39 @@ class MainHandler(tornado.web.RequestHandler):
 class GetSleepValue(tornado.web.RequestHandler):
     def get(self):
          self.write(str(self.application.sleepTicker.secondsLeft))
-         #self.write("55")
 
 class UpdateSleepValue(tornado.web.RequestHandler):
     def post(self):
         self.set_header("Content-Type", "text/plain")
-        self.application.sleepTicker.secondsLeft = int(self.get_argument("sleep"))
+        self.application.sleepTicker.increaseTicker(int(self.get_argument("sleep")))
         os.system("pactl set-sink-volume 0 -- 100%")
         self.redirect("/",permanent=True)
 
 class Sleep:
-    def __init__(self):
-        self.secondsLeft = 9999
+    def __init__(self, secondsLeft, startUpAudioVolume):
+        self.secondsLeft = secondsLeft
+        self.audio = Audio()
+        self.audio.setAudio(startUpAudioVolume)
     def ticker(self):
         print (datetime.now());
         print(self.secondsLeft)
         if self.secondsLeft > 0:
             self.secondsLeft = self.secondsLeft -1 #Why aint -- working like a normal language, like php?
         else:
-                os.system("pactl set-sink-volume 0 -- -20%")
+                self.audio.setAudio(-20)
+    def increaseTicker(self, seconds):
+        self.secondsLeft = seconds
+        self.audio.setAudio(100)
+
+class Audio:
+    def setAudio(self,value):
+        os.system("pactl set-sink-volume 0 -- " + str(value) + "%" )
 
 
 def main():
     tornado.options.parse_command_line()
-    app = tornado.web.Application(
-        # Rputes
+    application = tornado.web.Application(
+        # Routes
         [
             (r"/", MainHandler),
             (r"/getSleepValue", GetSleepValue),
@@ -50,20 +61,20 @@ def main():
         ],
 
         # Settings
-        template_path=os.path.join(os.path.dirname(__file__), "templates"),
-        static_path=os.path.join(os.path.dirname(__file__), "static")
+        template_path = os.path.join(os.path.dirname(__file__), "templates"),
+        static_path = os.path.join(os.path.dirname(__file__), "static")
     )
     main_loop = tornado.ioloop.IOLoop.instance()
 
     # Setting upp Sleep class
-    app.sleepTicker = Sleep()
+    application.sleepTicker = Sleep(options.secondsLeft,options.startUpAudioVolume)
     
-    #Adding 
-    sleepLoop = tornado.ioloop.PeriodicCallback(app.sleepTicker.ticker,1000,io_loop = main_loop)
+    #Adding callback for Sleep Class
+    sleepLoop = tornado.ioloop.PeriodicCallback(application.sleepTicker.ticker,1000,io_loop = main_loop)
     sleepLoop.start();
     
     try:
-        app.listen(options.port);
+        application.listen(options.port);
         main_loop.start();
     except KeyboardInterrupt:
         print("Good bye")
@@ -73,4 +84,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-    
