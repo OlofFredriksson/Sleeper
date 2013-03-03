@@ -3,15 +3,23 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import logging
 import os
 from datetime import datetime
 from tornado.options import define, options
 from subprocess import call
 
-## Config TODO, should be in a separate file
-define("port", default=8888, help="run on the given port", type=int)
-define("secondsLeft",default=2700) # 45 minutes
-define("startUpAudioVolume",default=100)
+def init_configuration():
+    define("port", type=int, help="Run on the given port")
+    define("startUpAudioVolume", type=int)
+    define("secondsLeft", type=int)
+    try:
+        tornado.options.parse_command_line()
+        tornado.options.parse_config_file("sleeper.conf")
+        
+    except IOError:
+        logging.warning("Cant find configuration file! (sleeper.conf)")
+        exit(1)
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -83,4 +91,5 @@ def main():
         exit()
     
 if __name__ == "__main__":
+    init_configuration()
     main()
