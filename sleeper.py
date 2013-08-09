@@ -33,8 +33,12 @@ class GetSleepValue(tornado.web.RequestHandler):
 
 class UpdateSleepValue(tornado.web.RequestHandler):
     def post(self):
+        try:
+            seconds = int(self.get_argument("sleep"))
+            self.application.sleepTicker.increaseTicker(seconds)
+        except ValueError:
+            logging.error("Variable is not an int")
         self.set_header("Content-Type", "text/plain")
-        self.application.sleepTicker.increaseTicker(int(self.get_argument("sleep")))
         self.redirect("/",permanent=True)
 
 
