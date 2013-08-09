@@ -7,9 +7,8 @@ import logging
 import os
 from datetime import datetime
 from tornado.options import define, options
-from audio.alsa import *
 from subprocess import call
-
+from sleep import Sleep
 def init_configuration():
     define("port", type=int, help="Run on the given port")
     define("audio", help="Audio plugin")
@@ -37,24 +36,6 @@ class UpdateSleepValue(tornado.web.RequestHandler):
         self.set_header("Content-Type", "text/plain")
         self.application.sleepTicker.increaseTicker(int(self.get_argument("sleep")))
         self.redirect("/",permanent=True)
-
-class Sleep:
-    def __init__(self, secondsLeft, startUpAudioVolume):
-        self.secondsLeft = secondsLeft
-
-        #Only have support for Alsa plugin right now, should be possible to add more plugins
-        self.audio = Alsa()
-        self.audio.setAudio(startUpAudioVolume)
-    def ticker(self):
-        print (datetime.now());
-        print(self.secondsLeft)
-        if self.secondsLeft > 0:
-            self.secondsLeft = self.secondsLeft -1 #Why aint -- working like a normal language, like php?
-        else:
-                self.audio.setAudio(-20)
-    def increaseTicker(self, seconds):
-        self.secondsLeft = seconds
-        self.audio.setAudio(100)
 
 
 def main():
