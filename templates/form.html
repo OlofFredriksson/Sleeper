@@ -3,14 +3,36 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/static/reset.css">
+		<link rel="stylesheet" type="text/css" href="/static/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="/static/sleeper.css">
 	</head>
 	<body>
-		<form action="/updateSleepValue" method="post">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="brand" href="/">Sleeper</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li class="active"><a href="#">Home</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<form action="/updateSleepValue" class="form-inline" method="post">
 			<input type="text" name="sleep" />
-			<input type="submit" value="Send" />
+			<input type="submit"  class="btn" value="Send" />
 		</form>
-		<br /> <br />
 		Value: <br /> <span id="secondsFromFile"></span>
-		<script src="static/sleeper.js"></script>
+	</div>
+	<script src="static/sleeper.js"></script>
 	</body>
 </html>
