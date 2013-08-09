@@ -7,10 +7,12 @@ import logging
 import os
 from datetime import datetime
 from tornado.options import define, options
+from audio.alsa import *
 from subprocess import call
 
 def init_configuration():
     define("port", type=int, help="Run on the given port")
+    define("audio", help="Audio plugin")
     define("startUpAudioVolume", type=int)
     define("secondsLeft", type=int)
     try:
@@ -34,13 +36,14 @@ class UpdateSleepValue(tornado.web.RequestHandler):
     def post(self):
         self.set_header("Content-Type", "text/plain")
         self.application.sleepTicker.increaseTicker(int(self.get_argument("sleep")))
-        os.system("pactl set-sink-volume 0 -- 100%")
         self.redirect("/",permanent=True)
 
 class Sleep:
     def __init__(self, secondsLeft, startUpAudioVolume):
         self.secondsLeft = secondsLeft
-        self.audio = Audio()
+
+        #Only have support for Alsa plugin right now, should be possible to add more plugins
+        self.audio = Alsa()
         self.audio.setAudio(startUpAudioVolume)
     def ticker(self):
         print (datetime.now());
@@ -52,10 +55,6 @@ class Sleep:
     def increaseTicker(self, seconds):
         self.secondsLeft = seconds
         self.audio.setAudio(100)
-
-class Audio:
-    def setAudio(self,value):
-        os.system("pactl set-sink-volume 0 -- " + str(value) + "%" )
 
 
 def main():
