@@ -1,1 +1,4 @@
+*.py[cod]
+
+# Config file
 sleeper.conf
