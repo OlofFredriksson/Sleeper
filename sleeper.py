@@ -12,6 +12,7 @@ from sleep import Sleep
 def init_configuration():
     define("port", type=int, help="Run on the given port")
     define("audio", help="Audio plugin")
+    define("debug", type=bool, help="Debug mode enabled")
     define("startUpAudioVolume", type=int)
     define("secondsLeft", type=int)
     try:
@@ -54,7 +55,8 @@ def main():
 
         # Settings
         template_path = os.path.join(os.path.dirname(__file__), "templates"),
-        static_path = os.path.join(os.path.dirname(__file__), "static")
+        static_path = os.path.join(os.path.dirname(__file__), "static"),
+        debug=options.debug
     )
     main_loop = tornado.ioloop.IOLoop.instance()
 
