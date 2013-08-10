@@ -5,7 +5,6 @@ import tornado.options
 import tornado.web
 import logging
 import os
-from datetime import datetime
 from tornado.options import define, options
 from subprocess import call
 from sleep import Sleep
@@ -30,7 +29,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 class GetSleepValue(tornado.web.RequestHandler):
     def get(self):
-         self.write(str(self.application.sleepTicker.secondsLeft))
+         self.write(str(self.application.sleepTicker.endTime))
 
 class UpdateSleepValue(tornado.web.RequestHandler):
     def post(self):
