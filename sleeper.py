@@ -60,7 +60,7 @@ def main():
     main_loop = tornado.ioloop.IOLoop.instance()
 
     # Setting upp Sleep class
-    application.sleepTicker = Sleep(options.secondsLeft,options.startUpAudioVolume)
+    application.sleepTicker = Sleep(options.audio,options.secondsLeft,options.startUpAudioVolume)
     
     #Adding callback for Sleep Class
     sleepLoop = tornado.ioloop.PeriodicCallback(application.sleepTicker.ticker,1000,io_loop = main_loop)

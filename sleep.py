@@ -2,13 +2,16 @@
 from audio.pactl import *
 from datetime import *
 import logging
+from utils import *
+
 class Sleep:
-    def __init__(self, secondsLeft, startUpAudioVolume):
+    def __init__(self, audioPlugin, secondsLeft, startUpAudioVolume):
         self.endTime = datetime.now() + timedelta(seconds=secondsLeft)
         self.AudioDisabled = False
-        
-        #Only have support for pactl plugin right now, should be possible to add more plugins
-        self.audio = Pactl()
+
+        # Init the audio plugin class, configurable in the config file
+        pluginClass = load_class("audio."+ audioPlugin.lower() + "." + audioPlugin)
+        self.audio = pluginClass()
         self.audio.setAudio(startUpAudioVolume)
 
     def ticker(self):
