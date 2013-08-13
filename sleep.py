@@ -20,8 +20,8 @@ class Sleep:
             logging.info("Audio is disabled")
             self.AudioDisabled = True
 
-    def increaseTicker(self, seconds):
+    def increaseTicker(self, minutes):
         self.AudioDisabled = False
-        self.endTime = datetime.now() + timedelta(seconds=seconds)
-        logging.info("Audio is activated, end time is" + str(self.endTime))
+        self.endTime =  self.endTime + timedelta(minutes=minutes)
+        logging.info("Audio is activated, end time is " + str(self.endTime))
         self.audio.setAudio(100)
