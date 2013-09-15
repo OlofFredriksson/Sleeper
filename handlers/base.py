@@ -6,8 +6,7 @@ from tornado.options import options
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        items = ""
-        self.render("form.html", title="My title", items=items)
+        self.render("form.html")
 
 class GetSleepValue(tornado.web.RequestHandler):
     def get(self):
