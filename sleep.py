@@ -11,6 +11,7 @@ class Sleep:
 
         # Init the audio plugin class, configurable in the config file
         pluginClass = load_class("audio."+ audioPlugin.lower() + "." + audioPlugin)
+        logging.info("Audio plugin " + audioPlugin + " is activated")
         self.audio = pluginClass()
         self.audio.setAudio(startUpAudioVolume)
 

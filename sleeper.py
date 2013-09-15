@@ -65,6 +65,8 @@ def main():
     #Adding callback for Sleep Class
     sleepLoop = tornado.ioloop.PeriodicCallback(application.sleepTicker.ticker,1000,io_loop = main_loop)
     sleepLoop.start();
+
+    logging.info("Sleeper is started")
     
     try:
         application.listen(options.port);
